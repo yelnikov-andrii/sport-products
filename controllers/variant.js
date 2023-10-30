@@ -28,11 +28,7 @@ const update = async (req, res) => {
       return res.status(404).send("Вариант товара не найден");
     }
 
-    if (variant.quantity <= quantity) {
-      variant.quantity = 0;
-    } else {
-      variant.quantity -= quantity;
-    }
+    variant.quantity = quantity;
 
     await variant.save();
 

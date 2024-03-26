@@ -1,7 +1,8 @@
 import { SubSubcategory } from '../models/SubSubcategory.js';
 
 const getSubSubCategories = async (req, res) => {
-  const { subcategoryId } = req.body;
+  const { subcategoryId } = req.query;
+
   if (!subcategoryId) {
     try {
       const subsubcategories = await SubSubcategory.findAll();
@@ -21,7 +22,7 @@ const getSubSubCategories = async (req, res) => {
       res.send(subsubcategories);
     }
     catch(e) {
-      console.log(e);
+      res.status(500).json({ error: error.message });
     }
   }
 };

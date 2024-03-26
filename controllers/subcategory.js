@@ -10,7 +10,7 @@ const getSubCategories = async (req, res) => {
 };
 
 const getSubCategoriesById = async (req, res) => {
-  const { categoryId } = req.params;
+  const { categoryId } = req.body;
   try {
     const subcategories = await SubCategory.findAll({
       where: {

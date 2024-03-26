@@ -18,6 +18,20 @@ const getCategories = async (req, res) => {
   }
 };
 
+const getOne = async (req, res) => {
+  const { categoryId } = req.params;
+
+  try {
+    const category = await Category.findOne({where: {
+      id: categoryId
+    }});
+
+    res.send(category);
+  } catch(e) {
+    res.status(500).json({error: 'Unexpected error'})
+  }
+}
+
 const createCategory = async (req, res) => {
   try {
     const { name_ukr, name_en } = req.body;
@@ -35,7 +49,8 @@ const createCategory = async (req, res) => {
 
 export const categoryController = {
   getCategories,
-  createCategory
+  createCategory,
+  getOne
 }
 
 

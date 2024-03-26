@@ -1,12 +1,30 @@
 import { SubCategory } from '../models/Subcategory.js';
 
 const getSubCategories = async (req, res) => {
-  try {
-    const subcategories = await SubCategory.findAll();
-    res.send(subcategories);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  const { categoryId } = req.body;
+  if (!categoryId) {
+    try {
+      const subcategories = await SubCategory.findAll();
+      res.send(subcategories);
+      return;
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
+  } else {
+    try {
+      const subcategories = await SubCategory.findAll({
+        where: {
+          CategorySportId: categoryId,
+        }
+      });
+      res.send(subcategories);
+    }
+    catch(e) {
+      console.log(e);
+    }
   }
+  
 };
 
 const getSubCategoriesById = async (req, res) => {
@@ -24,6 +42,20 @@ const getSubCategoriesById = async (req, res) => {
   }
 }
 
+const getOne = async (req, res) => {
+  const { subcategoryId } = req.params;
+
+  try {
+    const subcategory = await SubCategory.getOne({ where: {
+      id: subcategoryId
+    }});
+
+    res.send(subcategory);
+  } catch(e) {
+    res.status(500).json({ error: e.message });
+  }
+}
+
 const createSubcategory = async (req, res) => {
   try {
     const { name_ukr, name_en, CategorySportId } = req.body;
@@ -38,6 +70,7 @@ const createSubcategory = async (req, res) => {
 export const subcategoryController = {
   getSubCategories,
   getSubCategoriesById,
+  getOne,
   createSubcategory
 }
 

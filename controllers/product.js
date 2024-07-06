@@ -33,8 +33,8 @@ if (genders) {
 if (brands) {
   const brands = await BrandSport.findAll();
   whereClause[Op.or] = brands.split(',').map((brand) => {
-    const foundId = brands.find(b => b.name === brand);
-    return { BrandSportId: foundId };
+    const foundBrand = brands.find(b => b.name === brand);
+    return { BrandSportId: foundBrand?.id };
   });
 }
 

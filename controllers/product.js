@@ -3,6 +3,7 @@ import { SubSubcategory } from "../models/SubSubcategory.js";
 import { SubCategory } from "../models/Subcategory.js";
 import { Op, Sequelize } from "sequelize";
 import { VariantSport } from "../models/Variant.js";
+import { BrandSport } from "../models/Brand.js";
 
 async function withFilters(colors, ages, materials, genders, brands, sizes) {
   const whereClause = {};
@@ -30,8 +31,10 @@ if (genders) {
 }
 
 if (brands) {
+  const brands = await BrandSport.findAll();
   whereClause[Op.or] = brands.split(',').map((brand) => {
-    return { BrandSportId: +brand };
+    const foundId = brands.find(b => b.name === brand);
+    return { BrandSportId: foundId };
   });
 }
 

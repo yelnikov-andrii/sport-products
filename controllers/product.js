@@ -133,7 +133,8 @@ const getProductsByCategory = async (req, res) => {
   }
 
   if (category) {
-    const foundCategory = await Category.findOne({ where: { name_en: category } });
+    const decodedCategory = category.replaceAll('-and-', '&').replaceAll('-', ' ');
+    const foundCategory = await Category.findOne({ where: { name_en: decodedCategory } });
     const subcategories = await SubCategory.findAll({
       where: {
         CategorySportId: foundCategory.id,
@@ -151,7 +152,8 @@ const getProductsByCategory = async (req, res) => {
   }
 
   if (subcategory) {
-    const foundSubcategory = await SubCategory.findOne({ where: { name_en: subcategory } });
+    const decodedSubcategory = subcategory.replaceAll('-and-', '&').replaceAll('-', ' ');
+    const foundSubcategory = await SubCategory.findOne({ where: { name_en: decodedSubcategory } });
     const subsubcategories = await SubSubcategory.findAll({
       where: {
         SubcategorySportId: foundSubcategory.id,
@@ -166,7 +168,8 @@ const getProductsByCategory = async (req, res) => {
   }
 
   if (subsubcategory) {
-    const foundSubsubcategory = await SubSubcategory.findOne({ where: { name_en: subsubcategory } });
+    const decodedSubsubcategory = subsubcategory.replaceAll('-and-', '&').replaceAll('-', ' ');
+    const foundSubsubcategory = await SubSubcategory.findOne({ where: { name_en: decodedSubsubcategory } });
     whereClause.SubSubcategorySportId = foundSubsubcategory.id;
   }
 

@@ -4,58 +4,61 @@ import { SubCategory } from "../models/Subcategory.js";
 import { Op, Sequelize } from "sequelize";
 import { VariantSport } from "../models/Variant.js";
 import { BrandSport } from "../models/Brand.js";
+import { Category } from "../models/Category.js";
 
 async function withFilters(colors, ages, materials, genders, brands, sizes) {
   const whereClause = {};
 
-if (colors) {
-  whereClause.color_en = { [Op.overlap]: colors.split(',') };
-}
+  if (colors) {
+    whereClause.color_en = { [Op.overlap]: colors.split(',') };
+  }
 
-if (ages) {
-  whereClause[Op.or] = ages.split(',').map((age) => {
-    return Sequelize.literal(`age_en = '${age}'`);
-  });
-}
+  if (ages) {
+    whereClause[Op.or] = ages.split(',').map((age) => {
+      return Sequelize.literal(`age_en = '${age}'`);
+    });
+  }
 
-if (materials) {
-  whereClause[Op.or] = materials.split(',').map((material) => {
-    return Sequelize.literal(`material_en = '${material}'`);
-  });
-}
+  if (materials) {
+    whereClause[Op.or] = materials.split(',').map((material) => {
+      return Sequelize.literal(`material_en = '${material}'`);
+    });
+  }
 
-if (genders) {
-  whereClause[Op.or] = genders.split(',').map((gender) => {
-    return Sequelize.literal(`gender_en = '${gender}'`);
-  });
-}
+  if (genders) {
+    whereClause[Op.or] = genders.split(',').map((gender) => {
+      return Sequelize.literal(`gender_en = '${gender}'`);
+    });
+  }
 
-if (brands) {
-  const brandsFromServer = await BrandSport.findAll();
-  whereClause[Op.or] = brands.split(',').map((brand) => {
-    const foundBrand = brandsFromServer.find(b => b.name === brand);
-    return { BrandSportId: foundBrand?.id };
-  });
-}
+  if (brands) {
+    const brandsFromServer = await BrandSport.findAll();
+    whereClause[Op.or] = brands.split(',').map((brand) => {
+      const foundBrand = brandsFromServer.find(b => b.name === brand);
+      return { BrandSportId: foundBrand?.id };
+    });
+  }
 
-if (sizes) {
-  const sizesArr = sizes.split(',');
-  const variants = await VariantSport.findAll({where: {
-    name_en: {
-      [Op.or]: sizesArr.map((size) => {
-        return Sequelize.literal(`name_en = '${size}'`);
-      })
-    }
-  }});
-  const productIds = variants.map(variant => variant.ProductSportId);
+  if (sizes) {
+    const sizesArr = sizes.split(',');
+    const variants = await VariantSport.findAll({
+      where: {
+        name_en: {
+          [Op.or]: sizesArr.map((size) => {
+            return Sequelize.literal(`name_en = '${size}'`);
+          })
+        }
+      }
+    });
+    const productIds = variants.map(variant => variant.ProductSportId);
 
-  whereClause[Op.or] = productIds.map((productId) => {
-    return { id: +productId };
-  });
+    whereClause[Op.or] = productIds.map((productId) => {
+      return { id: +productId };
+    });
 
-}
+  }
 
-return whereClause;
+  return whereClause;
 }
 
 const getAll = async (req, res) => {
@@ -87,73 +90,84 @@ const getAll = async (req, res) => {
 
   if (brandId) {
     if (!page || !limit) {
-      products = await Product.findAll({where: {
-        BrandSportId: brandId
-      }});
+      products = await Product.findAll({
+        where: {
+          BrandSportId: brandId
+        }
+      });
     } else {
-      products = await Product.findAndCountAll({where: {
-        BrandSportId: brandId
-      }, limit, offset});
+      products = await Product.findAndCountAll({
+        where: {
+          BrandSportId: brandId
+        }, limit, offset
+      });
     }
   } else {
     if (!page || !limit) {
-      products = await Product.findAll({where: whereClause});
+      products = await Product.findAll({ where: whereClause });
     } else {
-      products = await Product.findAndCountAll( { where: whereClause, limit, offset });
+      products = await Product.findAndCountAll({ where: whereClause, limit, offset });
     }
   }
-  
+
   res.send(products);
 }
 
 const getOne = async (req, res) => {
   const { productId } = req.params;
-  const product = await Product.findOne({where: {
-    id: productId
-  }});
+  const product = await Product.findOne({
+    where: {
+      id: productId
+    }
+  });
   res.send(product);
 }
 
 const getProductsByCategory = async (req, res) => {
   let { category, subcategory, subsubcategory, limit, page, colors, brands, materials, ages, genders, sizes } = req.query;
   const whereClause = await withFilters(colors, ages, materials, genders, brands, sizes);
-  
+
   let offset = 0;
   if (limit && page) {
     offset = page * limit - limit;
   }
 
   if (category) {
-      const subcategories = await SubCategory.findAll({ where: {
-      CategorySportId: category,
-    }});
+    const foundCategory = await Category.findOne({ where: { name_en: category } });
+    const subcategories = await SubCategory.findAll({
+      where: {
+        CategorySportId: foundCategory.id,
+      }
+    });
     const subcategoryIds = subcategories.map(subcategory => subcategory.id);
     const subsubcategories = await SubSubcategory.findAll({
       where: {
         SubcategorySportId: subcategoryIds,
       }
     });
-    
+
     const subsubcategoryIds = subsubcategories.map(subsubcategory => subsubcategory.id);
     whereClause.SubSubcategorySportId = subsubcategoryIds;
   }
 
   if (subcategory) {
+    const foundSubcategory = await SubCategory.findOne({ where: { name_en: subcategory } });
     const subsubcategories = await SubSubcategory.findAll({
       where: {
-        SubcategorySportId: subcategory,
+        SubcategorySportId: foundSubcategory.id,
       },
       limit: limit,
       offset: offset
     });
-    
+
     const subsubcategoryIds = subsubcategories.map(subsubcategory => subsubcategory.id);
 
     whereClause.SubSubcategorySportId = subsubcategoryIds;
   }
 
   if (subsubcategory) {
-    whereClause.SubSubcategorySportId = subsubcategory;
+    const foundSubsubcategory = await SubSubcategory.findOne({ where: { name_en: subsubcategory } });
+    whereClause.SubSubcategorySportId = foundSubsubcategory.id;
   }
 
   if (!page || !limit) {

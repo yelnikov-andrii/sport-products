@@ -43,8 +43,8 @@ import { Sequelize } from 'sequelize';
 // }
 
 export const sequelize = new Sequelize('mydatabase_27kd', 'mydatabase_27kd_user', 'RjN6wPs0H75Oz7DuOBU7aqxcoslMwcO8', {
-  // host: 'dpg-coolt8v79t8c73f66d40-a.oregon-postgres.render.com',
-  host: 'dpg-coolt8v79t8c73f66d40-a',
+  host: 'dpg-coolt8v79t8c73f66d40-a.oregon-postgres.render.com',
+  // host: 'dpg-coolt8v79t8c73f66d40-a',
   dialectOptions: {
     ssl: {
       require: true,

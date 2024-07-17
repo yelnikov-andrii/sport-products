@@ -133,7 +133,7 @@ const getProductsByCategory = async (req, res) => {
   }
 
   if (category) {
-    const decodedCategory = category.replaceAll('-and-', '&').replaceAll('-', ' ');
+    const decodedCategory = category.replace(/-and-/g, '&').replace(/-/g, ' ');
     const foundCategory = await Category.findOne({ where: { name_en: decodedCategory } });
     const subcategories = await SubCategory.findAll({
       where: {
@@ -152,7 +152,7 @@ const getProductsByCategory = async (req, res) => {
   }
 
   if (subcategory) {
-    const decodedSubcategory = subcategory.replaceAll('-and-', '&').replaceAll('-', ' ');
+    const decodedSubcategory = subcategory.replace(/-and-/g, '&').replace(/-/g, ' ');
     const foundSubcategory = await SubCategory.findOne({ where: { name_en: decodedSubcategory } });
     const subsubcategories = await SubSubcategory.findAll({
       where: {
@@ -168,7 +168,7 @@ const getProductsByCategory = async (req, res) => {
   }
 
   if (subsubcategory) {
-    const decodedSubsubcategory = subsubcategory.replaceAll('-and-', '&').replaceAll('-', ' ');
+    const decodedSubsubcategory = subsubcategory.replace(/-and-/g, '&').replace(/-/g, ' ');
     const foundSubsubcategory = await SubSubcategory.findOne({ where: { name_en: decodedSubsubcategory } });
     whereClause.SubSubcategorySportId = foundSubsubcategory.id;
   }

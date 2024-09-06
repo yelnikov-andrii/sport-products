@@ -22,7 +22,7 @@ function send({email, subject, html}) {
 }
 
 function sendActivationLink(token, email) {
-  let link = `https://food-delivery-next-js-pi.vercel.app/activation/${token}`
+  let link = `https://https://fighters-next-js.vercel.app//activation/${token}`
   send({
     email,
     subject: 'Account activation',

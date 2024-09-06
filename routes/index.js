@@ -7,6 +7,7 @@ import { subcategoryRouter } from './subcategoryRouter.js';
 import { variantRouter } from './variantRouter.js';
 import { categoryRouter } from './categoryRouter.js';
 import { brandPhotoRouter } from './brandPhoto.js';
+import { authRouter } from './authRouter.js';
 
 export const router = express.Router();
 
@@ -18,3 +19,4 @@ router.use(subSubCategoryRouter);
 router.use(subcategoryRouter);
 router.use(variantRouter);
 router.use(brandPhotoRouter);
+router.use(authRouter);

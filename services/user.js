@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { User } from '../models/User.js';
 import { emailService } from './email.js';
-import { ApiError } from "../exceptions/ApiError.js";
+import { ApiError } from "../exceptions/apiError.js";
 import bcrypt from 'bcrypt';
 
 async function registerUser({email, password}) {

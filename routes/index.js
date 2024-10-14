@@ -7,6 +7,7 @@ import { subcategoryRouter } from './subcategoryRouter.js';
 import { variantRouter } from './variantRouter.js';
 import { categoryRouter } from './categoryRouter.js';
 import { brandPhotoRouter } from './brandPhoto.js';
+import { User } from '../models/User.js';
 
 export const router = express.Router();
 

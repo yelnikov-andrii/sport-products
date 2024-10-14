@@ -8,6 +8,14 @@ export const User = sequelize.define('user_sportproducts', {
       allowNull: false,
       unique: true,
     },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -15,29 +23,9 @@ export const User = sequelize.define('user_sportproducts', {
     role: {
       type: DataTypes.STRING,
       defaultValue: 'user'
-    },
-    activationToken: {
-      type: DataTypes.STRING
     }
   }, {
     // Other model options go here
   });
 
   User.sync();
-
-  export const Token = sequelize.define('token_sportproducts', {
-    // Model attributes are defined here
-    refreshToken: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    userId: {
-      type: DataTypes.INTEGER
-    }
-  }, {
-    // Other model options go here
-  });
-  
-  Token.sync();
-  User.hasOne(Token);
-  Token.belongsTo(User);

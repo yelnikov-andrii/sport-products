@@ -6,7 +6,7 @@ import { VariantSport } from "../models/Variant.js";
 import { BrandSport } from "../models/Brand.js";
 import { Category } from "../models/Category.js";
 
-async function withFilters(colors, ages, materials, genders, brands, sizes) {
+async function withFilters(colors, ages, materials, genders, brands, sizes, sort) {
   const whereClause = {};
 
   if (colors) {
@@ -62,9 +62,22 @@ async function withFilters(colors, ages, materials, genders, brands, sizes) {
 }
 
 const getAll = async (req, res) => {
-  let { limit, page, brandId, latest, colors, brands, materials, ages, genders, sizes } = req.query;
+  let { limit, page, brandId, latest, colors, brands, materials, ages, genders, sizes, sort, lang } = req.query;
   let offset;
   offset = page * limit - limit;
+ 
+  let order = [];
+  const nameField = lang === 'en' ? 'name_en' : 'name_ukr';
+
+  if (sort === 'alphAsc' || !sort) {
+    order.push([nameField, 'ASC']);
+  } else if (sort === 'alphDesc') {
+    order.push([nameField, 'DESC']);
+  } else if (sort === 'priceAsc') {
+    order.push(['price', 'ASC']);
+  } else if (sort === 'priceDesc') {
+    order.push(['price', 'DESC']);
+  }
 
   let products = [];
 
@@ -104,9 +117,9 @@ const getAll = async (req, res) => {
     }
   } else {
     if (!page || !limit) {
-      products = await Product.findAll({ where: whereClause });
+      products = await Product.findAll({ where: whereClause, order: order });
     } else {
-      products = await Product.findAndCountAll({ where: whereClause, limit, offset });
+      products = await Product.findAndCountAll({ where: whereClause, limit, offset, order: order });
     }
   }
 

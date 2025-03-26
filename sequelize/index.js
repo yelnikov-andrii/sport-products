@@ -21,8 +21,8 @@ import { Sequelize } from 'sequelize';
 // }
 
 export const sequelize = new Sequelize('march_db', 'march_db_user', 'OYXvW8MG9utK5wscUbOkRZW4Ch1yRHNO', {
-  // host: 'dpg-cvf9bbhopnds73b7vbv0-a.oregon-postgres.render.com',
-  host: 'dpg-cvf9bbhopnds73b7vbv0-a',
+  host: 'dpg-cvf9bbhopnds73b7vbv0-a.oregon-postgres.render.com',
+  // host: 'dpg-cvf9bbhopnds73b7vbv0-a',
   dialectOptions: {
     ssl: {
       require: true,

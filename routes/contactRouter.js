@@ -4,4 +4,4 @@ import { catchError } from '../utils/catchError.js'
 
 export const contactRouter = express.Router();
 
-contactRouter.post('/contacts', catchError(contactController.create));
+contactRouter.post('/contact', catchError(contactController.create));

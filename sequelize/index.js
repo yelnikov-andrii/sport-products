@@ -1,8 +1,8 @@
 import { Sequelize } from 'sequelize';
 
-// export const sequelize = new Sequelize('db_february_d98m', 'db_february_d98m_user', 'Qb0uQmcxljRBoQHdyQQBtlADKELdRcwQ', {
-//   // host: 'dpg-curf75bqf0us73fj93u0-a.oregon-postgres.render.com',
-//   host: 'dpg-curf75bqf0us73fj93u0-a',
+// export const sequelize = new Sequelize('march_db', 'march_db_user', 'OYXvW8MG9utK5wscUbOkRZW4Ch1yRHNO', {
+//   host: 'dpg-cvf9bbhopnds73b7vbv0-a.oregon-postgres.render.com',
+//   // host: 'dpg-cvf9bbhopnds73b7vbv0-a',
 //   dialectOptions: {
 //     ssl: {
 //       require: true,
@@ -20,9 +20,9 @@ import { Sequelize } from 'sequelize';
 //   console.error('Unable to connect to the database:', error);
 // }
 
-export const sequelize = new Sequelize('march_db', 'march_db_user', 'OYXvW8MG9utK5wscUbOkRZW4Ch1yRHNO', {
-  // host: 'dpg-cvf9bbhopnds73b7vbv0-a.oregon-postgres.render.com',
-  host: 'dpg-cvf9bbhopnds73b7vbv0-a',
+export const sequelize = new Sequelize('june_2025', 'june_2025_user', 'xqx6JmoweEmsz6U4bnqCdBW9h6Birt5D', {
+  // host: 'dpg-d10s5ve3jp1c739aik20-a.oregon-postgres.render.com',
+  host: 'dpg-d10s5ve3jp1c739aik20-a',
   dialectOptions: {
     ssl: {
       require: true,

@@ -9,10 +9,10 @@ function validateEmail(str) {
   const regexEmail = /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
   if (regexEmail.test(str)) {
     return ''
-} else {
+  } else {
     return 'Email is not valid'
+  }
 }
-}  
 
 function validatePassword(str) {
   if (!str) {
@@ -31,20 +31,21 @@ async function register(req, res) {
   const emailError = validateEmail(email);
   const passwordError = validatePassword(password);
   if (!email || !password) {
-    throw ApiError.BadRequest('Validation error', {email: emailError, password: passwordError})
+    throw ApiError.BadRequest('Validation error', { email: emailError, password: passwordError })
   }
 
-  await userService.registerUser({email, password});
-  res.send({message: 'OK'});
+  await userService.registerUser({ email, password });
+  res.send({ message: 'OK' });
 };
 
 async function login(req, res) {
   const { email, password } = req.body;
 
   const user = await userService.getByEmail(email);
+  console.log(user, 'user')
 
   if (!user) {
-    throw ApiError.BadRequest('User with this email does not exist', {email: 'User with this email does not exist'})
+    throw ApiError.BadRequest('User with this email does not exist', { email: 'User with this email does not exist' })
   }
 
   if (user.activationToken) {
@@ -54,7 +55,7 @@ async function login(req, res) {
   const passwordIsValid = await bcrypt.compare(password, user.password);
 
   if (!passwordIsValid) {
-    throw ApiError.BadRequest('Wrong password', {password: 'Wrong password'});
+    throw ApiError.BadRequest('Wrong password', { password: 'Wrong password' });
   }
 
   await sendAuthentication(res, user);
@@ -63,9 +64,11 @@ async function login(req, res) {
 async function activate(req, res) {
   const { activationToken } = req.params;
 
-  const user = await User.findOne({where: {
-    activationToken
-  }});
+  const user = await User.findOne({
+    where: {
+      activationToken
+    }
+  });
 
   if (!user) {
     res.sendStatus(500).message('User is already activated');
@@ -90,7 +93,7 @@ async function sendAuthentication(res, user) {
     secure: true
   });
 
-    res.send({ user: userData, accessToken });
+  res.send({ user: userData, accessToken });
 }
 
 async function refresh(req, res) {

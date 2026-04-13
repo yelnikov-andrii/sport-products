@@ -30,7 +30,7 @@ export const sequelize = new Sequelize(
   "db_april_2026_user",
   "0wqmsM8AmR5PfLOHcW9XURzXWBKNoRQ0",
   {
-    // host: 'dpg-d7ea4lkvikkc73ekj6n0-a.oregon-postgres.render.com',
+    // host: "dpg-d7ea4lkvikkc73ekj6n0-a.oregon-postgres.render.com",
     host: "dpg-d7ea4lkvikkc73ekj6n0-a",
     dialectOptions: {
       ssl: {
